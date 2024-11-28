@@ -1,0 +1,89 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+class SwingDemo {
+    SwingDemo() {
+        // create JFrame container
+        JFrame jfrm = new JFrame("Divider App");
+        jfrm.setSize(275, 150);
+        jfrm.setLayout(new GridLayout(5, 2)); // Improved layout for clarity
+
+        // to terminate on close
+        jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // text label
+        JLabel jlab = new JLabel("Enter the divider and dividend:");
+
+        // add text field for both numbers
+        JTextField ajtf = new JTextField(8);
+        JTextField bjtf = new JTextField(8);
+
+        // calc button
+        JButton button = new JButton("Calculate");
+
+        // labels to display inputs and result
+        JLabel err = new JLabel();
+        JLabel alab = new JLabel();
+        JLabel blab = new JLabel();
+        JLabel anslab = new JLabel();
+
+        // add components in order
+        jfrm.add(jlab);
+        jfrm.add(new JLabel()); // empty space
+        jfrm.add(new JLabel("A (dividend):"));
+        jfrm.add(ajtf);
+        jfrm.add(new JLabel("B (divisor):"));
+        jfrm.add(bjtf);
+        jfrm.add(button);
+        jfrm.add(err);
+        jfrm.add(alab);
+        jfrm.add(blab);
+        jfrm.add(anslab);
+
+        // ActionListener for the calculate button
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                try {
+                    // Parse integers from text fields
+                    int a = Integer.parseInt(ajtf.getText());
+                    int b = Integer.parseInt(bjtf.getText());
+                    
+                    // Check if division is valid
+                    if (b == 0) {
+                        throw new ArithmeticException("B should be NON zero!");
+                    }
+
+                    // Perform division and update labels
+                    int ans = a / b;
+                    alab.setText("A = " + a);
+                    blab.setText("B = " + b);
+                    anslab.setText("Ans = " + ans);
+                    err.setText(""); // Clear any previous error message
+                } catch (NumberFormatException e) {
+                    alab.setText("");
+                    blab.setText("");
+                    anslab.setText("");
+                    err.setText("Enter Only Integers!");
+                } catch (ArithmeticException e) {
+                    alab.setText("");
+                    blab.setText("");
+                    anslab.setText("");
+                    err.setText(e.getMessage()); // Display arithmetic error message
+                }
+            }
+        });
+
+        // Display the frame
+        jfrm.setVisible(true);
+    }
+
+    public static void main(String args[]) {
+        // Create frame on event dispatching thread
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new SwingDemo();
+            }
+        });
+    }
+}
